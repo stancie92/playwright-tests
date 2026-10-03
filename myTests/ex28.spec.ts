@@ -1,8 +1,4 @@
 import {test, expect} from "@playwright/test"
-import path from "path";
-import fs from "fs";
-
-
 
 
 test("Exercise 28: Intercept and Mock a Network Request", async({page, request})  => {
