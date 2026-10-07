@@ -1,18 +1,17 @@
 import {test, expect} from "@playwright/test"
-import path from "path";
-import fs from "fs";
+import path from "path"
+import fs from "fs"
+import { DownloadPage } from "./pages/DownloadPage"
 
 
 
 test("Exercise 20: Download and Verify a File", async({page}, testInfo)  => {
 
-    await page.goto("/module-4/exercise-20");
+    const downloadPage = new DownloadPage(page);
+    await downloadPage.goto()
 
     // Wait for download
-    const downloadPromise = page.waitForEvent("download");
-
-    await page.getByRole('link', { name: 'Download File', exact: true }).click();
-    const download = await downloadPromise;
+    const download = await downloadPage.downloadFile();
 
     //Wait for the download file
     const suggestedFileName = download.suggestedFilename();
