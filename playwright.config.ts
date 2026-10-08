@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+const isCI = !!process.env.CI;
 
 /**
  * Read environment variables from file.
@@ -23,7 +24,10 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['html'],
+    ['junit', { outputFile: 'test-results/results.xml' }],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -36,7 +40,7 @@ export default defineConfig({
     trace: "retain-on-failure",
 
     launchOptions: {
-    slowMo: 400,
+      slowMo: process.env.CI ? 0 : 400,
   },
   },
 
@@ -82,6 +86,6 @@ export default defineConfig({
    webServer: {
      command: 'npm run start',
      url: 'http://localhost:3000',
-     reuseExistingServer: true,
+     reuseExistingServer: !isCI,
    },
 });
