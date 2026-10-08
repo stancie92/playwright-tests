@@ -13,3 +13,6 @@ steps:
 - script: echo Witaj w moim pierwszym Azure Pipeline!
   displayName: 'Moj pierwszy krok'
 
+- script: node --version
+  displayName: 'Sprawdz wersje Node.js'  
+
