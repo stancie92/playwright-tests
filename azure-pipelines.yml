@@ -24,3 +24,6 @@ steps:
 
 - script: npm run build
   displayName: 'Build Next.js application'
+
+- script: npx playwright test --project=chromium
+  displayName: 'Run Playwright tests'  
