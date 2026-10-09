@@ -27,3 +27,11 @@ steps:
 
 - script: npx playwright test --project=chromium
   displayName: 'Run Playwright tests'  
+
+- task: PublishTestResults@2
+  displayName: 'Publish Playwright test results'
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'test-results/results.xml'
+    testRunTitle: 'Playwright Chromium Tests'
