@@ -35,3 +35,11 @@ steps:
     testResultsFormat: 'JUnit'
     testResultsFiles: 'test-results/results.xml'
     testRunTitle: 'Playwright Chromium Tests'
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish Playwright HTML report'
+  condition: succeededOrFailed()
+  inputs:
+    targetPath: 'playwright-report'
+    artifact: 'playwright-html-report'
+    publishLocation: 'pipeline'    
