@@ -16,3 +16,5 @@ steps:
 - script: node --version
   displayName: 'Sprawdz wersje Node.js'  
 
+- script: npm ci
+  displayName: 'Install dependencies'
