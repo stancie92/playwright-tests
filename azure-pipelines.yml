@@ -18,3 +18,6 @@ steps:
 
 - script: npm ci
   displayName: 'Install dependencies'
+
+- script: npx playwright install --with-deps chromium
+  displayName: 'Install Chromium'  
