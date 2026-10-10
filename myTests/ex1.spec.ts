@@ -11,6 +11,7 @@ test("Excercise 1", async({page}) => {
     const successMessage = page.locator("#welcome-message");
     await expect(successMessage).toBeVisible();
     await expect(successMessage).toContainText("You have successfully logged in.");
+    await expect(page).toHaveTitle('CELOWO BLEDNY TYTUL');
 
 
 
