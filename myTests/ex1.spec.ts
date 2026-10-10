@@ -1,6 +1,8 @@
 import {test, expect} from "@playwright/test"
 
 test("Excercise 1", async({page}) => {
+    
+    // Test login - Playwright
     await page.goto("/module-2/exercise-1");
 
     await page.getByTestId('username-input').fill("admin");
