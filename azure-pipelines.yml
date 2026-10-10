@@ -1,32 +1,50 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
 
 trigger: none
 pr: none
+
+parameters:
+- name: executionMode
+  displayName: 'Test execution mode'
+  type: string
+  default: standard
+  values:
+  - standard
+  - docker
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Witaj w moim pierwszym Azure Pipeline!
-  displayName: 'Moj pierwszy krok'
+- ${{ if eq(parameters.executionMode, 'docker') }}:
+  - script: docker build -t playwright-tests:1.0 .
+    displayName: 'Build Docker image'
 
-- script: node --version
-  displayName: 'Sprawdz wersje Node.js'  
+- ${{ if eq(parameters.executionMode, 'standard') }}:
+  - script: npm ci
+    displayName: 'Install dependencies'
 
-- script: npm ci
-  displayName: 'Install dependencies'
+- ${{ if eq(parameters.executionMode, 'standard') }}:
+  - script: npx playwright install --with-deps chromium
+    displayName: 'Install Chromium'
 
-- script: npx playwright install --with-deps chromium
-  displayName: 'Install Chromium' 
+- ${{ if eq(parameters.executionMode, 'standard') }}:
+  - script: npm run build
+    displayName: 'Build Next.js application'
 
-- script: npm run build
-  displayName: 'Build Next.js application'
+- ${{ if eq(parameters.executionMode, 'standard') }}:
+  - script: npx playwright test --project=chromium
+    displayName: 'Run Playwright tests'
+    env:
+      CI: 'true'
 
-- script: npx playwright test --project=chromium
-  displayName: 'Run Playwright tests'  
+- ${{ if eq(parameters.executionMode, 'docker') }}:
+  - script: |
+      docker run --rm -e CI=true \
+        -v "$(Build.SourcesDirectory)/playwright-report:/app/playwright-report" \
+        -v "$(Build.SourcesDirectory)/test-results:/app/test-results" \
+        playwright-tests:1.0 \
+        npx playwright test --project=chromium --workers=1
+    displayName: 'Run Playwright tests in Docker'      
 
 - task: PublishTestResults@2
   displayName: 'Publish Playwright test results'
