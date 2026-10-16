@@ -1,11 +1,12 @@
-name: My First Workflow
+name: Playwright CI
 
 on:
   workflow_dispatch:
 
 jobs:
-  hello:
+  playwright-tests:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,9 +30,6 @@ jobs:
         env:
           CI: 'true'  
 
-
-      - name: Say hello
-        run: echo "Hello from GitHub Actions!"
 
       - name: Upload Playwright report
         if: always()
